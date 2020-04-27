@@ -4,6 +4,7 @@ import math
 import pygame
 import numpy as np
 import matplotlib.pyplot as plt
+import time 
 
 WIDTH = 7
 HEIGHT = 7
@@ -111,6 +112,7 @@ class Maze:
         pygame.display.flip()
     
     def resetMaze(self):
+        # time.sleep(0.1)
         for row in range(self.boyut):
             for column in range(self.boyut):
                 color = WHITE
@@ -178,7 +180,8 @@ class Maze:
                     print(indiv.genes)
                     # print(self.maze, sep='\n')
                     print ("Gen number", indiv.genNumber)
-                    self.fillMove(RED)
+                    # self.fillMove(RED)
+                    self.visualSolution(indiv)
                     count = indiv.genNumber
                     self.makeTable(count)
                     quit()
@@ -186,6 +189,30 @@ class Maze:
                 indiv.visitScore = self.totalScore(tempMaze)
                 self.calcFit(indiv)
                 break;
+
+    
+    def visualSolution(self,solutionIndiv):
+        self.resetMaze()
+        self.currentCell = self.startCell
+        for gen in solutionIndiv.genes:
+            # print(gen)
+            posibleMove = None
+            if gen == "U" :
+                posibleMove = [self.currentCell[0] - 1, self.currentCell[1]]
+            elif gen == "D":
+                posibleMove = [self.currentCell[0] + 1, self.currentCell[1]]
+            elif gen == "R":
+                posibleMove = [self.currentCell[0], self.currentCell[1] + 1]
+            elif gen == "L":
+                posibleMove = [self.currentCell[0], self.currentCell[1] -1]
+            else:
+                print("Warning! Invalid gene detected: " + gen)
+            
+            self.currentCell = posibleMove
+            self.fillMove(RED)
+            if self.maze[self.currentCell[0]][self.currentCell[1]] == "E":
+                break
+
 
     def makeTable(self, count):
         # array = list(range(0, count))
@@ -350,7 +377,7 @@ if __name__ == "__main__":
 
     tempGEN = boyut * 10
     print("After ", tempGEN)
-    maze = Maze(boyut, engel)
+    maze = Maze(boyut+2, engel)
     
     evrim = GA(200,0.1,maze,tempGEN)
 
