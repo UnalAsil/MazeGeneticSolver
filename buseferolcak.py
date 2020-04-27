@@ -3,8 +3,8 @@ import random
 import math
 import pygame
 import numpy as np
+import matplotlib.pyplot as plt
 
-DENEME=5
 WIDTH = 7
 HEIGHT = 7
 BLACK = (0, 0, 0)
@@ -21,6 +21,7 @@ class Maze:
         self.engel = engel
         self.boyut = boyut
         self.bestIndiv = None
+        self.bestFinessValues = []
 
         grid = []
         for row in range(boyut):
@@ -150,6 +151,7 @@ class Maze:
         # print(len(indiv.genes))
         if(indiv == self.bestIndiv):
             self.resetMaze()
+            self.bestFinessValues.append(indiv.fitnes)
         for gen in indiv.genes:
             # print(gen)
             posibleMove = None
@@ -177,13 +179,23 @@ class Maze:
                     # print(self.maze, sep='\n')
                     print ("Gen number", indiv.genNumber)
                     self.fillMove(RED)
+                    count = indiv.genNumber
+                    self.makeTable(count)
                     quit()
             else:
                 indiv.visitScore = self.totalScore(tempMaze)
                 self.calcFit(indiv)
                 break;
 
-
+    def makeTable(self, count):
+        # array = list(range(0, count))
+        # plt.plot(array, self.bestFinessValues, "ro")
+        # plt.show
+        array = [i for i in range(count)]
+        plt.plot(array, self.bestFinessValues)
+        # plt.axis([0, count, 0, self.bestIndiv.fitnes])
+        plt.show()
+        # input("Bitmesi icin basiniz")
     
     def totalScore(self,tempMaze):
         return np.sum(tempMaze)
@@ -257,7 +269,7 @@ class GA:
             self.Fitness()
             self.Normalize() # Siralanmis dizi var normalizedda
             bestIndivForVisual = self.population[len(self.population)-1]
-            print(bestIndivForVisual)
+            # print(bestIndivForVisual)
             self.maze.bestIndiv = bestIndivForVisual
 
             # self.population[len(self.population)-1].visitScore = 0
