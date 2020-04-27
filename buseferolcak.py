@@ -4,6 +4,7 @@ import math
 import pygame
 import numpy as np
 
+DENEME=5
 WIDTH = 7
 HEIGHT = 7
 BLACK = (0, 0, 0)
