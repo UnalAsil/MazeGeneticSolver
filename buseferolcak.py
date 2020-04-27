@@ -3,19 +3,17 @@ import random
 import math
 import pygame
 import numpy as np
-##
 
-WIDTH = 20
-HEIGHT = 20
+WIDTH = 7
+HEIGHT = 7
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GREEN = (0, 255, 0)
 RED = (255, 0, 0)
 BLUE = (0,0,255)
 YELLOW = (0,255,255)
-MARGIN = 5
+MARGIN = 3
 
-###
 class Maze:
     def __init__(self,boyut, engel):
 
@@ -33,56 +31,23 @@ class Maze:
                      grid[row].append("-") 
             grid[row].append("#")
         
+        tempGrid = grid
 
-        for row in range(6,self.boyut-6,5):
-            for col in range(6, self.boyut-6, 5):
-                x = random.uniform(0,1)
-                print("PATIR PATIR PATLIYOR",row,col)
-                if x > 0.5:# yukardan asagiya
-                    # grid[row].append("#")
-                    y = random.uniform(0,1)
-                    if y<0.25:
-                        grid[row][col]= "#"
-                        grid[row+1][col]="#"
-                        grid[row+2][col]="#"
-                        grid[row+3][col]="#"
-                    elif y<0.5:
-                        grid[row][col+1]= "#"
-                        grid[row+1][col+1]="#"
-                        grid[row+2][col+1]="#"
-                        grid[row+3][col+1]="#"
-                    elif y<0.75:
-                        grid[row][col+2]= "#"
-                        grid[row+1][col+2]="#"
-                        grid[row+2][col+2]="#"
-                        grid[row+3][col+2]="#"
-                    else:
-                        grid[row][col+3]= "#"
-                        grid[row+1][col+3]="#"
-                        grid[row+2][col+3]="#"
-                        grid[row+3][col+3]="#"
-                else:# yatay
-                    y = random.uniform(0,1)
-                    if y<0.25:
-                        grid[row][col]= "#"
-                        grid[row][col+1]="#"
-                        grid[row][col+2]="#"
-                        grid[row][col+3]="#"
-                    elif y<0.5:
-                        grid[row+1][col]= "#"
-                        grid[row+1][col+1]="#"
-                        grid[row+1][col+2]="#"
-                        grid[row+1][col+3]="#"
-                    elif y<0.75:
-                        grid[row+2][col]= "#"
-                        grid[row+2][col+1]="#"
-                        grid[row+2][col+2]="#"
-                        grid[row+2][col+3]="#"
-                    else:
-                        grid[row+3][col]= "#"
-                        grid[row+3][col+1]="#"
-                        grid[row+3][col+2]="#"
-                        grid[row+3][col+3]="#"
+        for i in range(engel):
+            x = int(random.uniform(5,self.boyut-5))
+            z = int(random.uniform(5,self.boyut-5))
+            y = random.uniform(0,1)
+            if y > 0.5: # yukardan asagiya
+                grid[x][z]= "#"
+                grid[x+1][z]="#"
+                grid[x+2][z]="#"
+                grid[x+3][z]="#"
+            else :
+                grid[x][z]= "#"
+                grid[x][z+1]="#"
+                grid[x][z+2]="#"
+                grid[x][z+3]="#"
+
         self.maze = grid
 
         self.maze[1][1] = "S"
@@ -110,13 +75,12 @@ class Maze:
     def visual(self):
         pygame.init()
 
-        WINDOW_SIZE = [500, 500]
+        WINDOW_SIZE = [self.boyut*(WIDTH+MARGIN), self.boyut*(WIDTH+MARGIN)]
         self.screen = pygame.display.set_mode(WINDOW_SIZE)
         pygame.display.set_caption("Array Backed Grid")
 
         clock = pygame.time.Clock()
 
-        MARGIN = 5
         for row in range(self.boyut):
             for column in range(self.boyut):
                 color = WHITE
@@ -133,9 +97,6 @@ class Maze:
                                 WIDTH,
                                 HEIGHT])
         pygame.display.flip()
-    # Cikisi uzunluk +
-    # Baslangica uzaklik +
-    # 
 
     def fillMove(self, renk):
         color = renk
@@ -172,28 +133,20 @@ class Maze:
         cikisaUzunlukX = abs(self.currentCell[0] - self.endCell[0]) #
         cikisaUzunlukY = abs(self.currentCell[1] - self.endCell[1]) # EKSI
 
-        baslangicaUzaklikX = abs(self.currentCell[0] - self.startCell[0]) 
-        baslangicaUzaklikY = abs(self.currentCell[1] - self.startCell[1]) # ARTI
+        # baslangicaUzaklikX = abs(self.currentCell[0] - self.startCell[0]) 
+        # baslangicaUzaklikY = abs(self.currentCell[1] - self.startCell[1]) # ARTI
 
-
-        # indiv.fitnes =  (baslangicaUzaklikX+ baslangicaUzaklikY) / (carpmadanGittigi+1) + 2* 20 - (cikisaUzunlukX + cikisaUzunlukY)
-        # a = abs(self.currentCell[0] + self.currentCell[1] ) / math.sqrt(2)
-        # indiv.fitnes = 100 - cikisaUzunlukX **2 + cikisaUzunlukY **2 - a*a*a + (baslangicaUzaklikX**2+baslangicaUzaklikY**2)
-        # indiv.fitnes = 200 - math.sqrt(cikisaUzunlukX **2 + cikisaUzunlukY **2) + indiv.visitScore  + carpmadanGittigi
-        # indiv.fitnes = 200 - cikisaUzunlukX + cikisaUzunlukY
-        # indiv.fitnes = 200 - math.sqrt(cikisaUzunlukX **2 + cikisaUzunlukY **2)
-        # indiv.fitnes = (math.sqrt(baslangicaUzaklikX **2 + baslangicaUzaklikY **2))/(math.sqrt(cikisaUzunlukX **2 + cikisaUzunlukY **2))*100
-        # indiv.fitnes = 200 - math.sqrt(cikisaUzunlukX **2 + cikisaUzunlukY **2) - indiv.visitScore + carpmadanGittigi
-        # indiv.fitnes = 500000 - (cikisaUzunlukX **2 + cikisaUzunlukY **2) - indiv.visitScore 
-        # indiv.fitnes = 200 - math.sqrt(cikisaUzunlukX **2 + cikisaUzunlukY **2) - indiv.visitScore
         indiv.fitnes = 500000 -  10* math.sqrt(cikisaUzunlukX **2 + cikisaUzunlukY **2) - indiv.visitScore 
-        # indiv.fitnes = 500000 - (cikisaUzunlukX **2 + cikisaUzunlukY **2)
+        # indiv.fitnes = 500000 -  cikisaUzunlukX **2 + cikisaUzunlukY **2 - indiv.visitScore 
+
+   
     
     def walkInMaze(self, indiv):
         indiv.visitScore = 0
-        tempMaze = np.zeros([20, 20]) 
+        tempMaze = np.zeros([self.boyut, self.boyut]) 
         self.currentCell = self.startCell
         carpmadanGittigi = 0
+        # print(len(indiv.genes))
         if(indiv == self.bestIndiv):
             self.resetMaze()
         for gen in indiv.genes:
@@ -212,15 +165,12 @@ class Maze:
 
             if self.CheckForVaildMove(posibleMove):
                 self.currentCell = posibleMove
-
-                #
+                
                 tempMaze[self.currentCell[0]][self.currentCell[1]] += +1
 
-                #BURDA MAZEI BOYA
                 if(indiv == self.bestIndiv):
                     self.fillMove(RED)
-                # print(self.maze[self.currentCell[0]][self.currentCell[1]])
-                if indiv.visitScore == 0 and self.maze[self.currentCell[0]][self.currentCell[1]] == "E":
+                if self.maze[self.currentCell[0]][self.currentCell[1]] == "E":
                     print("Bulduk canim.")
                     print(indiv.genes)
                     # print(self.maze, sep='\n')
@@ -231,20 +181,10 @@ class Maze:
                 indiv.visitScore = self.totalScore(tempMaze)
                 self.calcFit(indiv)
                 break;
-            # else:
-            #     indiv.visitScore += 5
-            #     if(indiv == self.bestIndiv):
-            #         self.fillMove(BLACK)
-            #     continue
-            # self.calcFit(indiv)
-
-
-    # def visualBestIndiv(self,indiv):
 
 
     
     def totalScore(self,tempMaze):
-        # print (np.sum(tempMaze))
         return np.sum(tempMaze)
 
 
@@ -260,12 +200,12 @@ class Maze:
 
 
 class Individual:
-    GEN_LENGTH = 200
     def __init__(self, genNumber):
         self.genes = []
         self.fitnes = 0.0001
         self.visitScore = 0
         self.genNumber = genNumber
+      
 
     def __repr__(self):
         return str(self.fitnes)
@@ -274,18 +214,20 @@ class GA:
 
     genGenarationSource = ["U", "D", "R", "L"]
 
-    def __init__(self, populationSize, mutotianRate,maze):
+    def __init__(self, populationSize, mutotianRate,maze,GEN_LENGTH):
         self.populationSize = populationSize
         self.mutotianRate = mutotianRate
         self.maze = maze
         self.population  = []
-
+        self.GEN_LENGTH = GEN_LENGTH
+        self.yuzde = int(populationSize/20)
+        self.fitnessValues = []
         for i in range(self.populationSize):
             indiv = Individual(0)
-            for j in range (Individual.GEN_LENGTH):
+            for j in range (self.GEN_LENGTH):
                 indiv.genes.append(random.choice(GA.genGenarationSource))
             self.population.append(indiv)
-    
+        # print(self.yuzde)
    
     def Normalize(self):
         sum = 0
@@ -301,41 +243,36 @@ class GA:
         
         
     def Fitness(self):
-        #Populasyonun her bireyi, labirente yollanmali.
         for indiv in self.population:
-            # print(indiv.genes)
             self.maze.walkInMaze(indiv)
 
     def evrilme(self):
         count = 0
         MAXGEN = 10000000
-        print("Populasyon uzunlugu: ", len(self.population))
-
-
-        while count < MAXGEN:
+        while count < MAXGEN :
             print(count)
             count += 1
             nextPopulation = []
             self.Fitness()
             self.Normalize() # Siralanmis dizi var normalizedda
-            # print("MAKSFIT ", self.population[0].fitnes)
             bestIndivForVisual = self.population[len(self.population)-1]
+            print(bestIndivForVisual)
             self.maze.bestIndiv = bestIndivForVisual
 
-            self.population[len(self.population)-1].visitScore = 0
-            self.population[len(self.population)-2].visitScore = 0
-            nextPopulation.append(self.population[len(self.population)-1]) # -> Elite child.
-            nextPopulation.append(self.population[len(self.population)-2])
+            # self.population[len(self.population)-1].visitScore = 0
+            # self.population[len(self.population)-2].visitScore = 0
+            # nextPopulation.append(self.population[len(self.population)-1]) # -> Elite child.
+            # nextPopulation.append(self.population[len(self.population)-2])
+
+            for i in range(self.yuzde):
+                nextPopulation.append(self.population[len(self.population)-i-1])
             
             AKUM = []
             AKUM.append(self.population[0].fitnes)
-            # # print("AKUM HESABINDA INDIV.FIT", self.population[0].fitnes )
             for i in range (1,self.populationSize):
-                # print("AKUM HESABINDA INDIV.FIT", self.population[i].fitnes )
                 AKUM.append(AKUM[i-1] + self.population[i].fitnes)
 
-            # # print("AKUM:" , AKUM[len(self.population)-1] )
-            for i in range (self.populationSize-2):
+            for i in range (self.populationSize - self.yuzde):
                 parent1 = self.randomSelect(AKUM)
                 parent2 = self.randomSelect(AKUM)
                 child = self.CrossOver(parent1,parent2)
@@ -345,14 +282,12 @@ class GA:
                 
                 nextPopulation.append(child)
             self.population = nextPopulation
-            # print("Populasyon uzunlugu: ", len(self.population))
 
     def randomSelect(self, AKUM):
         uyg = random.uniform(0,1)
  
         for j in range(len(AKUM)):
             if uyg <= AKUM[j]:
-                # print(self.population[j])
                 return self.population[j]
 
 
@@ -360,11 +295,11 @@ class GA:
     def CrossOver(self, parent1, parent2):
 
         child = Individual(0)
-        crossPoint1 = random.randint(0, Individual.GEN_LENGTH - 1)
+        crossPoint1 = random.randint(0, self.GEN_LENGTH - 1)
 
-        crossPoint2 = random.randint(0, Individual.GEN_LENGTH - 1)
+        crossPoint2 = random.randint(0, self.GEN_LENGTH - 1)
 
-        crossPoint23 = random.randint(0, Individual.GEN_LENGTH - 1)
+        crossPoint23 = random.randint(0, self.GEN_LENGTH - 1)
 
         if crossPoint1<crossPoint2 :
 
@@ -373,26 +308,20 @@ class GA:
         else :
             child.genes = parent1.genes[:crossPoint2] + parent2.genes[crossPoint2:crossPoint1] + parent1.genes[crossPoint1:]
 
-
-        # child.genes = parent1.genes[:crossPoint1] + parent2.genes[crossPoint1:crossPoint2] + parent1.genes[crossPoint2:]
-
-        # child.genes = parent1.genes[:crossPoint1] + parent2.genes[crossPoint1:]
-
         return child
 
 
     def mutateChild(self,child):
-        temp = int(Individual.GEN_LENGTH / 10)
+        temp = int(self.GEN_LENGTH / 10)
         dummy = []
         for i in range(temp):
             dummy.append(random.choice(GA.genGenarationSource))
 
 
-        mutaionPoint = random.randint(0, Individual.GEN_LENGTH - 20)
+        mutaionPoint = random.randint(0, self.GEN_LENGTH - temp-1)
 
         for i in range(temp):
             child.genes[mutaionPoint+i] = dummy[i]
-        
         return child
 
     def printPop(self):
@@ -400,17 +329,17 @@ class GA:
             print("\nIndiv :", indiv.genes)             
 
 
-if __name__ == "__main__":
 
+if __name__ == "__main__":
     boyut = int(input("Labirentin boyutlarini giriniz"))
     
-    Engel = int(input("Engel sayisini giriniz"))
+    engel = int(input("Engel sayisini giriniz"))
 
-    maze = Maze(boyut, Engel)
+    tempGEN = boyut * 10
+    print("After ", tempGEN)
+    maze = Maze(boyut, engel)
     
-    evrim = GA(20,0.1,maze)
-    # input("AAA")
-    # for i in range(10):
-    #     print(evrim.population[i].genes)
+    evrim = GA(200,0.1,maze,tempGEN)
+
     evrim.evrilme()
 
