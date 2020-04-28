@@ -19,7 +19,6 @@ if __name__ == "__main__":
     engel = int(input("Engel sayisini giriniz"))
 
     tempGEN = boyut * 10
-    print("After ", tempGEN)
     maze = Maze(boyut+2, engel)
     
     evrim = GA(200,0.1,maze,tempGEN)

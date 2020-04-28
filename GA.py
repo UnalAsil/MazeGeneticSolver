@@ -36,7 +36,6 @@ class GA:
             for j in range (self.GEN_LENGTH):
                 indiv.genes.append(random.choice(GA.genGenarationSource))
             self.population.append(indiv)
-        # print(self.yuzde)
    
     def Normalize(self):
         sum = 0
@@ -65,13 +64,7 @@ class GA:
             self.Fitness()
             self.Normalize() # Siralanmis dizi var normalizedda
             bestIndivForVisual = self.population[len(self.population)-1]
-            # print(bestIndivForVisual)
             self.maze.bestIndiv = bestIndivForVisual
-
-            # self.population[len(self.population)-1].visitScore = 0
-            # self.population[len(self.population)-2].visitScore = 0
-            # nextPopulation.append(self.population[len(self.population)-1]) # -> Elite child.
-            # nextPopulation.append(self.population[len(self.population)-2])
 
             for i in range(self.yuzde):
                 nextPopulation.append(self.population[len(self.population)-i-1])
