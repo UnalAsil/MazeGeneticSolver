@@ -132,16 +132,11 @@ class Maze:
 
 
     def calcFit(self,indiv):
-        # indiv.visitScore = self.maze
-
+ 
         cikisaUzunlukX = abs(self.currentCell[0] - self.endCell[0]) #
-        cikisaUzunlukY = abs(self.currentCell[1] - self.endCell[1]) # EKSI
-
-        # baslangicaUzaklikX = abs(self.currentCell[0] - self.startCell[0]) 
-        # baslangicaUzaklikY = abs(self.currentCell[1] - self.startCell[1]) # ARTI
+        cikisaUzunlukY = abs(self.currentCell[1] - self.endCell[1]) # 
 
         indiv.fitnes = 500000 -  10* math.sqrt(cikisaUzunlukX **2 + cikisaUzunlukY **2) - indiv.visitScore 
-        # indiv.fitnes = 500000 -  cikisaUzunlukX **2 + cikisaUzunlukY **2 - indiv.visitScore 
 
    
     
@@ -150,12 +145,10 @@ class Maze:
         tempMaze = np.zeros([self.boyut, self.boyut]) 
         self.currentCell = self.startCell
         carpmadanGittigi = 0
-        # print(len(indiv.genes))
         if(indiv == self.bestIndiv):
             self.resetMaze()
             self.bestFinessValues.append(indiv.fitnes)
         for gen in indiv.genes:
-            # print(gen)
             posibleMove = None
             if gen == "U" :
                 posibleMove = [self.currentCell[0] - 1, self.currentCell[1]]
@@ -176,9 +169,7 @@ class Maze:
                 if self.maze[self.currentCell[0]][self.currentCell[1]] == "E":
                     print("Yol bulundu")
                     print(indiv.genes)
-                    # print(self.maze, sep='\n')
                     print ("Gen number", indiv.genNumber)
-                    # self.fillMove(RED)
                     self.visualSolution(indiv)
                     count = indiv.genNumber
                     self.makeTable(count)
@@ -193,7 +184,6 @@ class Maze:
         self.resetMaze()
         self.currentCell = self.startCell
         for gen in solutionIndiv.genes:
-            # print(gen)
             posibleMove = None
             if gen == "U" :
                 posibleMove = [self.currentCell[0] - 1, self.currentCell[1]]
