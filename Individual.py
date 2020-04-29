@@ -19,7 +19,7 @@ MARGIN = 3
 
 
 
-class Individual:
+class Individual: #Bireylerin genleri, fitness puani ve visitScoru tutuluyor.
     def __init__(self, genNumber):
         self.genes = []
         self.fitnes = 0.0001
